@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -14,9 +15,11 @@ public class GameManager : MonoBehaviour
     public GameObject winScreen;
     public GameObject loseScreen;
     private InputSystem inputManager;
+    public TextMeshProUGUI timerText;
 
-    public float gameTime = 60f; // Total game time in seconds
-    
+    [SerializeField]
+    private float gameTime = 60f; // Total game time in seconds
+
     void Awake()
     {
         if (winScreen != null)
@@ -26,6 +29,10 @@ public class GameManager : MonoBehaviour
         if (loseScreen != null)
         {
             loseScreen.SetActive(false);
+        }
+        if (timerText != null)
+        {
+            timerText.text = "Time: " + gameTime.ToString("F0") + "s";
         }
         inputManager = new InputSystem();
     }
@@ -80,9 +87,11 @@ public class GameManager : MonoBehaviour
 
    public void Timer()
     {
+        
         if (gameTime > 0)
         {
             gameTime -= Time.deltaTime;
+            timerText.text = "Time: " + gameTime.ToString("F0");
         }
         else
         {
@@ -99,19 +108,19 @@ public class GameManager : MonoBehaviour
     public void Win()
     {
 
-        //currentState = GameState.Win;
+        currentState = GameState.Win;
 
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
 
-       // winScreen.SetActive(true);
+        winScreen.SetActive(true);
     }
 
    public void Lose()
     {
-        //currentState = GameState.Lose;
+        currentState = GameState.Lose;
 
-       // Time.timeScale = 0f;
+       Time.timeScale = 0f;
 
-       // loseScreen.SetActive(true);
+       loseScreen.SetActive(true);
     }
 }
