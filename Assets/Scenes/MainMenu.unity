@@ -478,8 +478,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.6972516, g: 0.9169811, b: 0.7054696, a: 1}
-    m_PressedColor: {r: 0.44220003, g: 0.6528301, b: 0.44972256, a: 1}
+    m_HighlightedColor: {r: 0.91764706, g: 0.7230037, b: 0.69803923, a: 1}
+    m_PressedColor: {r: 0.7132075, g: 0.54012007, b: 0.5153933, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.4490565, g: 0.4490565, b: 0.4490565, a: 0.36862746}
     m_ColorMultiplier: 1
@@ -844,6 +844,7 @@ MonoBehaviour:
   winScreen: {fileID: 0}
   loseScreen: {fileID: 0}
   timerText: {fileID: 0}
+  pauseScreen: {fileID: 0}
   gameTime: 10
 --- !u!1 &4871860559445263480
 GameObject:
@@ -1023,8 +1024,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.69803923, g: 0.91764706, b: 0.7058824, a: 1}
+    m_PressedColor: {r: 0.44313726, g: 0.6509804, b: 0.4509804, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.4490565, g: 0.4490565, b: 0.4490565, a: 0.36862746}
     m_ColorMultiplier: 1
