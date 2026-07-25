@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class GameManager : MonoBehaviour
     public GameObject loseScreen;
     private InputSystem inputManager;
     public TextMeshProUGUI timerText;
+
+    public GameObject pauseScreen;
+
+    //public bool gamePaused;
 
     [SerializeField]
     private float gameTime = 60f; // Total game time in seconds
@@ -81,9 +86,21 @@ public class GameManager : MonoBehaviour
                 
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
                 break;
-
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (currentState == GameState.Playing)
+            {
+                PauseGame();
+                currentState = GameState.Paused;
+            }
+            else
+            {
+                ResumeGame();
+                currentState = GameState.Playing;
+            }
+        }
     }
 
    public void Timer()
@@ -130,6 +147,7 @@ public class GameManager : MonoBehaviour
     {
         currentState = GameState.Lose;
         Application.Quit();
+        Debug.Log("Quit function working");
     }
 
     public void QuitToMainMenu()
@@ -141,14 +159,15 @@ public class GameManager : MonoBehaviour
     
     public void PauseGame()
     {
-        currentState= GameState.Paused;
+        currentState = GameState.Paused;
         Time.timeScale = 0f;
-
+        pauseScreen.SetActive(true);
     }
     
     public void ResumeGame()
     {
         currentState = GameState.Playing;
         Time.timeScale = 1f;
+        pauseScreen.SetActive(false);
     }
 }
