@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -102,7 +103,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         currentState = GameState.Playing;
-
+        SceneManager.LoadScene("SampleScene"); //When player clicks the "Start Game" button the *game* scene will open.
         Time.timeScale = 1f;
     }
     public void Win()
@@ -122,5 +123,32 @@ public class GameManager : MonoBehaviour
        Time.timeScale = 0f;
 
        loseScreen.SetActive(true);
+    }
+
+    // UI Functions
+    public void QuitGame()
+    {
+        currentState = GameState.Lose;
+        Application.Quit();
+    }
+
+    public void QuitToMainMenu()
+    {
+        currentState = GameState.Lose;
+        SceneManager.LoadScene("MainMenu");
+
+    }
+    
+    public void PauseGame()
+    {
+        currentState= GameState.Paused;
+        Time.timeScale = 0f;
+
+    }
+    
+    public void ResumeGame()
+    {
+        currentState = GameState.Playing;
+        Time.timeScale = 1f;
     }
 }
