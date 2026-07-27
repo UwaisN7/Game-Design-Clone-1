@@ -2112,6 +2112,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 707216072}
   m_CullTransparentMesh: 1
+--- !u!1 &756284625
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 756284627}
+  - component: {fileID: 756284626}
+  m_Layer: 0
+  m_Name: RewardSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &756284626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756284625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d82a60860170c30409e23372a7517d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RewardManager
+  correctAnswer: 7
+--- !u!4 &756284627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756284625}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 398.68597, y: 605.2589, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &772432222
 GameObject:
   m_ObjectHideFlags: 0
@@ -3583,7 +3628,9 @@ MonoBehaviour:
   loseScreen: {fileID: 1612317131445619761}
   timerText: {fileID: 697583319}
   pauseScreen: {fileID: 370794801}
-  gameTime: 10
+  rewardManager: {fileID: 756284626}
+  selectedValue: 23
+  gameTime: 50
 --- !u!1 &7700492879710757394
 GameObject:
   m_ObjectHideFlags: 0
@@ -3852,3 +3899,4 @@ SceneRoots:
   - {fileID: 1446818730824230111}
   - {fileID: 367700570}
   - {fileID: 109041109}
+  - {fileID: 756284627}

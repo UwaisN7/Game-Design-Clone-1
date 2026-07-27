@@ -20,8 +20,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timerText;
 
     public GameObject pauseScreen;
-
+    [SerializeField]
+    private RewardManager rewardManager;
     //public bool gamePaused;
+
+    public string selectedValue;
 
     [SerializeField]
     private float gameTime = 60f; // Total game time in seconds
@@ -41,6 +44,8 @@ public class GameManager : MonoBehaviour
             timerText.text = "Time: " + gameTime.ToString("F0") + "s";
         }
         inputManager = new PlayerInput();
+
+
     }
 
     void OnEnable()
@@ -69,10 +74,14 @@ public class GameManager : MonoBehaviour
                 // Player Inputs and selects a tile the Games timescale is 0 
                 break;
 
-                case GameState.Playing:
+            case GameState.Playing:
                 Timer();
-                Debug.Log("Game is in progress.");
-                Debug.Log("Time remaining: " + gameTime + " seconds");
+                //Debug.Log("Game is in progress.");
+                //Debug.Log("Time remaining: " + gameTime + " seconds");
+                if (Keyboard.current.spaceKey.wasPressedThisFrame)
+                {
+                   PlayerSelected(selectedValue);   //ATTENTION THIS IS FIR TESTING PURPOSES ONLY, THIS WILL BE CHANGED TO A TILE SELECTION IN THE FUTURE
+                }
                 //Player selects a tile and the Games timescale is 1 and timer now ticks down
                 break;
 
@@ -84,7 +93,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Lose:
                 Debug.Log("Game Over! You lose.");
-                
+
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
                 break;
         }
@@ -104,9 +113,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   public void Timer()
+    public void Timer()
     {
-        
+
         if (gameTime > 0)
         {
             gameTime -= Time.deltaTime;
@@ -118,7 +127,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   
+
     public void Win()
     {
 
@@ -129,13 +138,13 @@ public class GameManager : MonoBehaviour
         winScreen.SetActive(true);
     }
 
-   public void Lose()
+    public void Lose()
     {
         currentState = GameState.Lose;
 
-       Time.timeScale = 0f;
+        Time.timeScale = 0f;
 
-       loseScreen.SetActive(true);
+        loseScreen.SetActive(true);
     }
 
     // UI Functions
@@ -152,7 +161,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
 
     }
-     public void StartGame()
+    public void StartGame()
     {
         currentState = GameState.Playing;
         SceneManager.LoadScene("SampleScene"); //When player clicks the "Start Game" button the *game* scene will open.
@@ -164,11 +173,29 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         pauseScreen.SetActive(true);
     }
-    
+
     public void ResumeGame()
     {
         currentState = GameState.Playing;
         Time.timeScale = 1f;
         pauseScreen.SetActive(false);
+    }
+
+
+    //Grid generator and reward system will be added here in the future
+
+    public void PlayerSelected(string value)
+    {
+        bool finished = rewardManager.CheckSelection(value);
+
+        if (finished)
+        {
+            Win();
+        }
+        else
+        {
+            Lose();
+        }
+
     }
 }
