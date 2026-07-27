@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public GameState currentState;
     public GameObject winScreen;
     public GameObject loseScreen;
-    private InputSystem inputManager;
+    private PlayerInput inputManager;
     public TextMeshProUGUI timerText;
 
     public GameObject pauseScreen;
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         {
             timerText.text = "Time: " + gameTime.ToString("F0") + "s";
         }
-        inputManager = new InputSystem();
+        inputManager = new PlayerInput();
     }
 
     void OnEnable()
@@ -59,10 +59,11 @@ public class GameManager : MonoBehaviour
         switch (currentState)
         {
             case GameState.StartOfGame:
-                if (inputManager.Player.Attack.triggered)
+                if (inputManager.Player.Click.triggered)
                 {
-                   StartGame();
                     Time.timeScale = 1f; // Set the timescale to 1 when the game starts
+                    Debug.Log("Game has started.");//Yeah this is a placeholder  before we get the grid 
+                    currentState = GameState.Playing;
                 }
 
                 // Player Inputs and selects a tile the Games timescale is 0 
@@ -117,12 +118,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
-    {
-        currentState = GameState.Playing;
-        SceneManager.LoadScene("SampleScene"); //When player clicks the "Start Game" button the *game* scene will open.
-        Time.timeScale = 1f;
-    }
+   
     public void Win()
     {
 
@@ -156,7 +152,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
 
     }
-    
+     public void StartGame()
+    {
+        currentState = GameState.Playing;
+        SceneManager.LoadScene("SampleScene"); //When player clicks the "Start Game" button the *game* scene will open.
+        Time.timeScale = 1f;
+    }
     public void PauseGame()
     {
         currentState = GameState.Paused;

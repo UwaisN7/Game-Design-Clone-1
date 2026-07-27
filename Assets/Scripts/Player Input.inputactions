@@ -3,13 +3,22 @@
     "name": "Player Input",
     "maps": [
         {
-            "name": "Keyboard",
+            "name": "Player",
             "id": "b37d349a-5efa-4a87-ba5c-7c3102c005d3",
             "actions": [
                 {
                     "name": "Pause Game",
                     "type": "Button",
                     "id": "e9066c30-4d86-47cc-b6d6-7ed66cf8f57a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "bd084f19-9bda-4b37-ad9e-43ecc7cb7026",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -25,6 +34,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause Game",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "40c423ea-715a-4f78-8a24-a3c2051ca1fd",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

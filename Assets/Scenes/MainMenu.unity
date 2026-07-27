@@ -863,7 +863,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &4871860559445263481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -905,9 +905,13 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e9066c30-4d86-47cc-b6d6-7ed66cf8f57a
     m_ActionName: 'Keyboard/Pause Game[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bd084f19-9bda-4b37-ad9e-43ecc7cb7026
+    m_ActionName: 'Player/Click[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Keyboard
+  m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &5092396039113976470
