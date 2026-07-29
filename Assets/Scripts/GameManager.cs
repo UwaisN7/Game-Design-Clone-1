@@ -76,12 +76,16 @@ public class GameManager : MonoBehaviour
 
             case GameState.Playing:
                 Timer();
+
+                if (inputManager.Player.Click.triggered)
+                {
+                    PlayerSelected(int.Parse(selectedValue));
+                }
+
+                //This is a test to see if the reward manager is working and communicating with the GM
                 //Debug.Log("Game is in progress.");
                 //Debug.Log("Time remaining: " + gameTime + " seconds");
-                if (Keyboard.current.spaceKey.wasPressedThisFrame)
-                {
-                   PlayerSelected(selectedValue);   //ATTENTION THIS IS FIR TESTING PURPOSES ONLY, THIS WILL BE CHANGED TO A TILE SELECTION IN THE FUTURE
-                }
+
                 //Player selects a tile and the Games timescale is 1 and timer now ticks down
                 break;
 
@@ -164,7 +168,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         currentState = GameState.Playing;
-        SceneManager.LoadScene("SampleScene"); //When player clicks the "Start Game" button the *game* scene will open.
+        SceneManager.LoadScene("ActualGameScene"); //When player clicks the "Start Game" button the *game* scene will open.
         Time.timeScale = 1f;
     }
     public void PauseGame()
@@ -184,18 +188,16 @@ public class GameManager : MonoBehaviour
 
     //Grid generator and reward system will be added here in the future
 
-    public void PlayerSelected(string value)
+    public void PlayerSelected(int selectedValue)
     {
-        bool finished = rewardManager.CheckSelection(value);
+        bool finished =
+            rewardManager.CheckSelection(selectedValue);
 
         if (finished)
         {
             Win();
         }
-        else
-        {
-            Lose();
-        }
+
 
     }
 }

@@ -4,10 +4,13 @@ using TMPro;
 
 public class CyberpunkGridManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameManager gameManager;
     [Header("Grid Config")]
     public int gridSize = 5;
     public int bufferSize = 6;
     public int[] codePool = new int[] { 10, 20, 30, 40, 50 };
+    private bool firstMove = true;
 
     [Header("UI References")]
     public Transform gridContainer;
@@ -31,7 +34,8 @@ public class CyberpunkGridManager : MonoBehaviour
         playerBuffer.Clear();
         isHorizontal = true;
         activeIndex = 0; // Starts locked to Top Row (Row 0)
-        gameActive = true;
+      
+        firstMove = true;
         bufferText.color = Color.white; // Reset color on start
 
         GeneratePuzzleData(out int[,] rawGrid, out targetCodes);
@@ -60,39 +64,69 @@ public class CyberpunkGridManager : MonoBehaviour
 
     void OnCellClicked(CellUI clickedCell)
     {
-        if (!gameActive || clickedCell.IsUsed) return;
+        if (gameManager.currentState != GameManager.GameState.Playing)
+            return;
 
         clickedCell.MarkAsUsed();
+        gameManager.PlayerSelected(clickedCell.Code);
         playerBuffer.Add(clickedCell.Code);
 
-        // Toggle Axis
-        if (isHorizontal)
+        if (firstMove)
         {
-            isHorizontal = false;
-            activeIndex = clickedCell.GridPos.x;
+            firstMove = false;
+
+            isHorizontal = true;
+            activeIndex = clickedCell.GridPos.y;
+
+          
         }
         else
         {
-            isHorizontal = true;
-            activeIndex = clickedCell.GridPos.y;
+            if (isHorizontal)
+            {
+                isHorizontal = false;
+                activeIndex = clickedCell.GridPos.x;
+            }
+            else
+            {
+                isHorizontal = true;
+                activeIndex = clickedCell.GridPos.y;
+            }
         }
 
+        // These should happen EVERY click
         UpdateGridHighlights();
         UpdateBufferUI();
-
-        // Run the match checking algorithm after every move
         CheckForMatches();
     }
 
     void UpdateGridHighlights()
     {
-        for (int x = 0; x < gridSize; x++)
         {
-            for (int y = 0; y < gridSize; y++)
+            for (int x = 0; x < gridSize; x++)
             {
-                if (cellGrid[x, y].IsUsed) continue;
-                bool isSelectable = isHorizontal ? (y == activeIndex) : (x == activeIndex);
-                cellGrid[x, y].SetHighlight(isSelectable);
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if (cellGrid[x, y].IsUsed)
+                        continue;
+
+                    bool isSelectable;
+
+                    if (firstMove)
+                    {
+                        // First move: every unused tile is selectable
+                        isSelectable = true;
+                    }
+                    else
+                    {
+                        // After the first move, follow the row/column rule
+                        isSelectable = isHorizontal
+                            ? (y == activeIndex)
+                            : (x == activeIndex);
+                    }
+
+                    cellGrid[x, y].SetHighlight(isSelectable);
+                }
             }
         }
     }
@@ -122,7 +156,8 @@ public class CyberpunkGridManager : MonoBehaviour
         bufferText.text = string.Join("  ", playerBuffer);
     }
 
-    void CheckForMatches()
+    void CheckForMatches() //This should be deleted when the reward manager is implemented because it does the same thing as the reward manager
+        //I put it in the reward manager
     {
         bool allSolved = true;
 
@@ -159,11 +194,12 @@ public class CyberpunkGridManager : MonoBehaviour
         // End Game Conditions
         if (allSolved)
         {
-            gameActive = false;
+            gameManager.Win();
             bufferText.color = Color.green; // Visual win indicator
         }
         else if (playerBuffer.Count >= bufferSize)
         {
+            gameManager.Lose();
             gameActive = false;
             bufferText.color = Color.red; // Visual loss indicator
         }
