@@ -8,7 +8,7 @@ using UnityEngine.LightTransport;
 public class RewardManager : MonoBehaviour
 {
     private GameManager gameManager;
-    private CyberpunkGridManager gridManager;
+    //private CyberpunkGridManager gridManager;
 
     public int playerLives; 
     
@@ -21,7 +21,6 @@ public class RewardManager : MonoBehaviour
     private void Start()
     {
         gameManager = FindAnyObjectByType<GameManager>();
-        gridManager = FindAnyObjectByType<CyberpunkGridManager>();
 
         playerLives = 3;
     }
@@ -55,15 +54,15 @@ public class RewardManager : MonoBehaviour
 
     public void IncreaseGridSize() // Inreases grid size by one row and column. Gives additional time
     {
-        if (gridManager.gridSize <= 8)
+        if (CyberpunkGridManager.gridSize <= 8)
         {
-            gridManager.gridSize++; 
+            CyberpunkGridManager.gridSize++; 
         }
         gameManager.gameTime += additionalTime;
     }
     public void IncreaseBufferLength() //Increase the amount of "incorrect" selections the player is allowed to make
     {
-        gridManager.bufferSize++;
+        CyberpunkGridManager.bufferSize++;
     }
     public void AddPlayerLife()
     {
@@ -75,10 +74,10 @@ public class RewardManager : MonoBehaviour
 
     public void ResetProgress()
     {
-        gameManager.round = 1;
-        gameManager.gameTime = 60f;
-        gridManager.gridSize = 5;
-        gridManager.bufferSize = 6;
+        GameManager.round = 1;
+        GameManager.initialGameTime = 60f;
+        CyberpunkGridManager.gridSize = 5;
+        CyberpunkGridManager.bufferSize = 6;
         Debug.Log("Progress Reset");
     }
 

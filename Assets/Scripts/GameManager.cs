@@ -1,5 +1,6 @@
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -27,10 +28,11 @@ public class GameManager : MonoBehaviour
 
     public string selectedValue;
 
-    //[SerializeField]
+    [SerializeField]
     public float gameTime = 60f; // Total game time in seconds
+    public static float initialGameTime = 60f; // Initial game time for reference
 
-    public int round = 1;
+    public static int round = 1;
 
     void Awake()
     {
@@ -48,6 +50,7 @@ public class GameManager : MonoBehaviour
         }
         inputManager = new PlayerInput();
 
+        gameTime = initialGameTime; // Reset game time to initial value at the start of the game
 
     }
 
@@ -70,7 +73,7 @@ public class GameManager : MonoBehaviour
                 if (inputManager.Player.Click.triggered)
                 {
                     Time.timeScale = 1f; // Set the timescale to 1 when the game starts
-                    Debug.Log("Game has started.");//Yeah this is a placeholder  before we get the grid 
+                    //Debug.Log("Game has started.");//Yeah this is a placeholder  before we get the grid 
                     currentState = GameState.Playing;
                 }
 
@@ -94,12 +97,20 @@ public class GameManager : MonoBehaviour
 
             case GameState.Paused:
                 //Player selects esc the timescale is 0 and the game is paused
+                Time.timeScale = 0f;
+                pauseScreen.SetActive(true);
                 break;
             case GameState.Win:
                 //Player gets the rewards and wins the game and the win screen is displayed timescale is 0
+                Time.timeScale = 0f;
+                winScreen.SetActive(true);
                 break;
             case GameState.Lose:
                 Debug.Log("Game Over! You lose.");
+                Time.timeScale = 0f;
+                loseScreen.SetActive(true);
+                //reset progress should be called here
+                rewardManager.ResetProgress();
 
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
                 break;
@@ -137,21 +148,12 @@ public class GameManager : MonoBehaviour
 
     public void Win()
     {
-
         currentState = GameState.Win;
-
-        Time.timeScale = 0f;
-
-        winScreen.SetActive(true);
     }
 
     public void Lose()
     {
         currentState = GameState.Lose;
-
-        Time.timeScale = 0f;
-
-        loseScreen.SetActive(true);
     }
 
     // UI Functions
@@ -166,7 +168,6 @@ public class GameManager : MonoBehaviour
 
     public void QuitToMainMenu()
     {
-        rewardManager.ResetProgress();
         currentState = GameState.Lose;
         SceneManager.LoadScene("MainMenu");
     }
@@ -179,8 +180,6 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         currentState = GameState.Paused;
-        Time.timeScale = 0f;
-        pauseScreen.SetActive(true);
     }
 
     public void ResumeGame()
@@ -192,9 +191,10 @@ public class GameManager : MonoBehaviour
 
     public void NextRound()
     {
-        round++;
+        round ++;
         Debug.Log("Round " + round + " started");
         gameTime -= (gameTime * 0.1f);
+        Debug.Log("Time reduced by " + (gameTime * 0.1f) + " seconds");
     }
 
     
