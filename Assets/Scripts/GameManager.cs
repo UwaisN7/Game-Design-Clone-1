@@ -1,7 +1,8 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,8 +27,10 @@ public class GameManager : MonoBehaviour
 
     public string selectedValue;
 
-    [SerializeField]
-    private float gameTime = 60f; // Total game time in seconds
+    //[SerializeField]
+    public float gameTime = 60f; // Total game time in seconds
+
+    public int round = 1;
 
     void Awake()
     {
@@ -157,13 +160,15 @@ public class GameManager : MonoBehaviour
         currentState = GameState.Lose;
         Application.Quit();
         Debug.Log("Quit function working");
+        rewardManager.ResetProgress();
+
     }
 
     public void QuitToMainMenu()
     {
+        rewardManager.ResetProgress();
         currentState = GameState.Lose;
         SceneManager.LoadScene("MainMenu");
-
     }
     public void StartGame()
     {
@@ -185,6 +190,15 @@ public class GameManager : MonoBehaviour
         pauseScreen.SetActive(false);
     }
 
+    public void NextRound()
+    {
+        round++;
+        Debug.Log("Round " + round + " started");
+        gameTime -= (gameTime * 0.1f);
+    }
+
+    
+
 
     //Grid generator and reward system will be added here in the future
 
@@ -197,7 +211,5 @@ public class GameManager : MonoBehaviour
         {
             Win();
         }
-
-
     }
 }

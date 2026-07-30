@@ -18,6 +18,9 @@ public class CyberpunkGridManager : MonoBehaviour
     public TextMeshProUGUI targetCodesText;
     public TextMeshProUGUI bufferText;
 
+    [Header("Round Logic")]
+    public int round = 0;
+
     private CellUI[,] cellGrid;
     private List<List<int>> targetCodes = new List<List<int>>();
     private List<int> playerBuffer = new List<int>();
@@ -44,6 +47,8 @@ public class CyberpunkGridManager : MonoBehaviour
         SpawnGridUI(rawGrid);
         UpdateGridHighlights();
         UpdateBufferUI();
+        
+        //updateRoundLogic();
     }
 
     void SpawnGridUI(int[,] rawGrid)
@@ -261,5 +266,12 @@ public class CyberpunkGridManager : MonoBehaviour
                 if (grid[x, y] == 0) grid[x, y] = codePool[Random.Range(0, codePool.Length)];
             }
         }
+    }
+
+    void updateRoundLogic()
+    {
+        round++;
+        Debug.Log("Round " + round + " started");
+        gameManager.gameTime -= (gameManager.gameTime * 0.1f);
     }
 }
