@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -50,8 +51,16 @@ public class GameManager : MonoBehaviour
         }
         inputManager = new PlayerInput();
 
-        gameTime = initialGameTime; // Reset game time to initial value at the start of the game
-
+        if(round == 1)//placeholder for now until I get the round reset code working.
+        {
+            initialGameTime = 60f;
+            gameTime = initialGameTime; // Reset game time to initial value at the start of the game
+        }
+        else
+        {
+            gameTime = initialGameTime; // Keep the game time from the previous round
+        }
+        
     }
 
     void OnEnable()
@@ -193,7 +202,7 @@ public class GameManager : MonoBehaviour
     {
         round ++;
         Debug.Log("Round " + round + " started");
-        gameTime -= (gameTime * 0.1f);
+        initialGameTime -= (gameTime * 0.1f);
         Debug.Log("Time reduced by " + (gameTime * 0.1f) + " seconds");
     }
 

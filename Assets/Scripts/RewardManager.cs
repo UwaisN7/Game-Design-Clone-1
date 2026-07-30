@@ -22,7 +22,7 @@ public class RewardManager : MonoBehaviour
     {
         gameManager = FindAnyObjectByType<GameManager>();
 
-        playerLives = 3;
+        //playerLives = 3;
     }
 
 

@@ -849,6 +849,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7555038334132592328}
+    - target: {fileID: 1896079758422162619, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
+      propertyPath: m_BlockingObjects
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3234404108619141881, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -883,11 +887,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3303132060785348347, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: NextRound
+      value: StartGame
       objectReference: {fileID: 0}
     - target: {fileID: 3303132060785348347, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartGame
+      value: NextRound
       objectReference: {fileID: 0}
     - target: {fileID: 3303132060785348347, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
