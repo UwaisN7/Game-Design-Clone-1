@@ -30,10 +30,11 @@ public class GameManager : MonoBehaviour
     public string selectedValue;
 
     [SerializeField]
-    public float gameTime = 60f; // Total game time in seconds
+    public float gameTime; // Total game time in seconds
     public static float initialGameTime = 60f; // Initial game time for reference
 
-    public static int round = 1;
+    public readonly int startingRound = 1;
+    public int currentRound;
 
     void Awake()
     {
@@ -51,7 +52,7 @@ public class GameManager : MonoBehaviour
         }
         inputManager = new PlayerInput();
 
-        if(round == 1)//placeholder for now until I get the round reset code working.
+        if(currentRound == 1)//placeholder for now until I get the round reset code working.
         {
             initialGameTime = 60f;
             gameTime = initialGameTime; // Reset game time to initial value at the start of the game
@@ -118,7 +119,6 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Game Over! You lose.");
                 Time.timeScale = 0f;
                 loseScreen.SetActive(true);
-                //reset progress should be called here
                 rewardManager.ResetProgress();
 
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
@@ -163,6 +163,10 @@ public class GameManager : MonoBehaviour
     public void Lose()
     {
         currentState = GameState.Lose;
+        gameTime = initialGameTime; // Reset the game time to the initial value
+        currentRound = startingRound; // Reset the current round to the starting round
+        rewardManager.ResetProgress(); // Reset the progress + upgrades in the RewardManager
+
     }
 
     // UI Functions
@@ -200,8 +204,8 @@ public class GameManager : MonoBehaviour
 
     public void NextRound()
     {
-        round ++;
-        Debug.Log("Round " + round + " started");
+        currentRound += 1;
+        Debug.Log("Round " + currentRound + " started");
         initialGameTime -= (gameTime * 0.1f);
         Debug.Log("Time reduced by " + (gameTime * 0.1f) + " seconds");
     }

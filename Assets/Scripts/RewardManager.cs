@@ -30,7 +30,7 @@ public class RewardManager : MonoBehaviour
     //This is a test function to check this will communicate with the GM make sure this is last in the script
     public bool CheckSelection(int selectedValue)
     {
-        Debug.Log("Received " + selectedValue);
+        //Debug.Log("Received " + selectedValue);
 
         if (selectedValue == correctAnswer)
         {
@@ -74,8 +74,8 @@ public class RewardManager : MonoBehaviour
 
     public void ResetProgress()
     {
-        GameManager.round = 1;
-        GameManager.initialGameTime = 60f;
+        //GameManager.currentRound = 1;
+        //GameManager.initialGameTime = 60f;
         CyberpunkGridManager.gridSize = 5;
         CyberpunkGridManager.bufferSize = 6;
         Debug.Log("Progress Reset");
