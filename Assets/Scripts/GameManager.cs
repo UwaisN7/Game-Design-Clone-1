@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public GameObject loseScreen;
     private PlayerInput inputManager;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI roundCountText;
 
     public GameObject pauseScreen;
     [SerializeField]
@@ -36,6 +37,8 @@ public class GameManager : MonoBehaviour
 
     public readonly int startingRound = 1;
     public int currentRound;
+    private bool roundUIUpdated = false;
+    private bool firstRound = true;
 
     void Awake()
     {
@@ -62,7 +65,9 @@ public class GameManager : MonoBehaviour
         {
             gameTime = initialGameTime; // Keep the game time from the previous round
         }
-        
+        currentRound = startingRound;
+        roundUIUpdated = false;
+
     }
 
     void OnEnable()
@@ -87,7 +92,11 @@ public class GameManager : MonoBehaviour
                     //Debug.Log("Game has started.");//Yeah this is a placeholder  before we get the grid 
                     currentState = GameState.Playing;
                 }
-
+                if (roundUIUpdated == false)
+                {
+                    UpdateRoundUI();
+                    timerText.text = "Time: " + gameTime.ToString("F0");
+                }
                 // Player Inputs and selects a tile the Games timescale is 0 
                 break;
 
@@ -98,11 +107,11 @@ public class GameManager : MonoBehaviour
                 {
                     PlayerSelected(int.Parse(selectedValue));
                 }
-                if (winScreen != null)
+                /*if (winScreen != null)
                 {
                     winScreen.SetActive(false);
                     Debug.Log("Win screen turned off");
-                }
+                }*/
 
                 //This is a test to see if the reward manager is working and communicating with the GM
                 //Debug.Log("Game is in progress.");
@@ -159,6 +168,11 @@ public class GameManager : MonoBehaviour
             Lose();
         }
     }
+    public void UpdateRoundUI()
+    {
+        roundCountText.text = "Round: " + currentRound.ToString();
+        roundUIUpdated = true;
+    }
 
 
     public void Win()
@@ -209,9 +223,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void NextRound()
-    { 
-        currentState= GameState.Playing;
-
+    {
+        roundUIUpdated = false;
+        //roundCountText.text = "Round: " + currentRound.ToString();
+        winScreen.SetActive(false);
         currentRound += 1;
         Debug.Log("Round " + currentRound + " started");
         initialGameTime -= (gameTime * 0.1f);
@@ -219,6 +234,7 @@ public class GameManager : MonoBehaviour
         gameTime = initialGameTime;
 
         gridManager.StartGame();
+        currentState= GameState.StartOfGame;
 
     }
     //Grid generator and reward system will be added here in the future
