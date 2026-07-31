@@ -15,13 +15,16 @@ public class GameManager : MonoBehaviour
         Paused,
         Win,
         Lose,
+        FailedRound
     }
     public GameState currentState;
     public GameObject winScreen;
     public GameObject loseScreen;
+    public GameObject roundLoseScreen;
     private PlayerInput inputManager;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI roundCountText;
+    public TextMeshProUGUI livesText;
 
     public GameObject pauseScreen;
     [SerializeField]
@@ -49,6 +52,10 @@ public class GameManager : MonoBehaviour
         {
             loseScreen.SetActive(false);
         }
+        if (roundLoseScreen != null)
+        {
+            loseScreen.SetActive(false);
+        }
         if (timerText != null)
         {
             timerText.text = "Time: " + gameTime.ToString("F0") + "s";
@@ -59,6 +66,7 @@ public class GameManager : MonoBehaviour
         {
             initialGameTime = 60f;
             gameTime = initialGameTime; // Reset game time to initial value at the start of the game
+            
         }
         else
         {
@@ -79,12 +87,16 @@ public class GameManager : MonoBehaviour
         inputManager.Disable();
     }
 
-
+    private void Start()
+    {
+        rewardManager.playerLives = 3; // Reset player lives to 3 at the start of the game
+    }
     void Update()
     {
         switch (currentState)
         {
             case GameState.StartOfGame:
+                livesText.text = "Lives: " + rewardManager.playerLives.ToString();
                 if (inputManager.Player.Click.triggered)
                 {
                     Time.timeScale = 1f; // Set the timescale to 1 when the game starts 
@@ -96,6 +108,7 @@ public class GameManager : MonoBehaviour
                     timerText.text = "Time: " + gameTime.ToString("F0");
                 }
                 break;
+
 
             case GameState.Playing:
                 Time.timeScale = 1f;
@@ -125,6 +138,10 @@ public class GameManager : MonoBehaviour
                 rewardManager.ResetProgress();//reset the progress + upgrades in the RewardManager when the player loses
 
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
+                break;
+             case GameState.FailedRound:
+                Debug.Log("Round Failed! You lose a life.");
+                Time.timeScale = 0f;
                 break;
         }
 
@@ -166,15 +183,33 @@ public class GameManager : MonoBehaviour
     public void Win()
     {
         currentState = GameState.Win;
+        rewardManager.UpgradeSelector(); // Call the UpgradeRandomiser function in the RewardManager when the player wins
     }
 
     public void Lose()
     {
+        if(rewardManager.playerLives == 1)
+        {
+            LoseRun();
+        }
+        else
+        {
+            roundLoseScreen.SetActive(true);
+            currentState = GameState.FailedRound;
+            gameTime = initialGameTime;
+            rewardManager.playerLives -= 1; // Decrease player lives by 1
+            Debug.Log("Player lives remaining: " + rewardManager.playerLives);
+            livesText.text = "Lives: " + rewardManager.playerLives.ToString();
+        }
+            
+    }
+    public void LoseRun()
+    {
+        loseScreen.SetActive(true);
         currentState = GameState.Lose;
         gameTime = initialGameTime; // Reset the game time to the initial value
         currentRound = startingRound; // Reset the current round to the starting round (1)
         rewardManager.ResetProgress(); // Reset the progress + upgrades in the RewardManager
-
     }
 
     // UI Functions

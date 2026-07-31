@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.LightTransport;
@@ -8,26 +9,69 @@ using UnityEngine.LightTransport;
 public class RewardManager : MonoBehaviour
 {
     private GameManager gameManager;
-    //private CyberpunkGridManager gridManager;
+    private CyberpunkGridManager gridManager;
 
-    public int playerLives; 
-    
+    public int playerLives = 3;
+
     [SerializeField] private int correctAnswer = 7;      //This is a test but the correct answers are stored here and will change when u do random
     [SerializeField] private int additionalTime;
-    
+
+    //public List<int> upgradeNumberPool = new List<int> { 1, 2, 3};
+    public bool upgradeAssigned = false;
+
+
 
     //So like the logic for randomising numbers will be here 
 
     private void Start()
     {
         gameManager = FindAnyObjectByType<GameManager>();
+        gridManager = FindAnyObjectByType<CyberpunkGridManager>();
+        upgradeAssigned = false;
 
-        //playerLives = 3;
+        playerLives = 3;
+    }
+public void IncreaseGridSize() // Inreases grid size by one row and column. Gives additional time
+    {
+        if (CyberpunkGridManager.gridSize <= 8)
+        {
+            CyberpunkGridManager.gridSize +=1 ; 
+        }
+        gameManager.gameTime += additionalTime;
+    }
+    public void IncreaseBufferLength() //Increase the amount of "incorrect" selections the player is allowed to make
+    {
+        CyberpunkGridManager.bufferSize++;
+    }
+    public void AddPlayerLife()
+    {
+        if (playerLives < 4 )
+        {
+            playerLives++;
+        }   
     }
 
+    public void ResetProgress()
+    {
+        GameManager.initialGameTime = 60f;
+        CyberpunkGridManager.gridSize = 5;
+        CyberpunkGridManager.bufferSize = 6;
+        Debug.Log("Progress Reset");
+    }
 
+    public void UpgradeSelector() //Test funcion cause I just want to make sure the upgrades are working with the grid manager.
+    {
+        if (upgradeAssigned == false)
+        {
+            //IncreaseBufferLength();
+            AddPlayerLife();
+            //IncreaseGridSize();
+            upgradeAssigned = true; // Mark that an upgrade has been assigned
+        }
+        
+    }
 
-    //This is a test function to check this will communicate with the GM make sure this is last in the script
+//This is a test function to check this will communicate with the GM make sure this is last in the script
     public bool CheckSelection(int selectedValue)
     {
         //Debug.Log("Received " + selectedValue);
@@ -52,36 +96,6 @@ public class RewardManager : MonoBehaviour
         return false;
     }
 
-    public void IncreaseGridSize() // Inreases grid size by one row and column. Gives additional time
-    {
-        if (CyberpunkGridManager.gridSize <= 8)
-        {
-            CyberpunkGridManager.gridSize++; 
-        }
-        gameManager.gameTime += additionalTime;
-    }
-    public void IncreaseBufferLength() //Increase the amount of "incorrect" selections the player is allowed to make
-    {
-        CyberpunkGridManager.bufferSize++;
-    }
-    public void AddPlayerLife()
-    {
-        if (playerLives < 4 )
-        {
-            playerLives++;
-        }   
-    }
-
-    public void ResetProgress()
-    {
-        GameManager.initialGameTime = 60f;
-        CyberpunkGridManager.gridSize = 5;
-        CyberpunkGridManager.bufferSize = 6;
-        Debug.Log("Progress Reset");
-    }
-
-
-
     //Ok bro when you see this comment (this is tira's work you can use it if you want or do ur own thing just want  to give you options)
 
     //Basically below is a  reward manager thats on the grid system script.so if u wanna reuse it you are going to have to replace variables 
@@ -92,50 +106,50 @@ public class RewardManager : MonoBehaviour
     //So it does everything we want so thats why i feel like it shoudl be looked at.
 
 
-    //void CheckForMatches()
-    //{
-    //    bool allSolved = true;
+    /*public void CheckForMatches()
+    {
+        bool allSolved = true;
 
-    //    for (int i = 0; i < targetCodes.Count; i++)
-    //    {
-    //        if (solvedSequences[i]) continue; // Skip if already solved
+       for (int i = 0; i < targetCodes.Count; i++)
+        {
+            if (solvedSequences[i]) continue; // Skip if already solved
 
-    //        List<int> seq = targetCodes[i];
+            List<int> seq = targetCodes[i];
 
-    //        // Only check if the buffer has enough numbers to form the sequence
-    //        if (playerBuffer.Count >= seq.Count)
-    //        {
-    //            bool isMatch = true;
-    //            int bufferStartIndex = playerBuffer.Count - seq.Count;
+            // Only check if the buffer has enough numbers to form the sequence
+           if (playerBuffer.Count >= seq.Count)
+           {
+                bool isMatch = true;
+                int bufferStartIndex = playerBuffer.Count - seq.Count;
 
-    //            // Check if the end of the buffer perfectly matches this sequence
-    //            for (int j = 0; j < seq.Count; j++)
-    //            {
-    //                if (playerBuffer[bufferStartIndex + j] != seq[j])
-    //                {
-    //                    isMatch = false;
-    //                    break;
-    //                }
-    //            }
+               // Check if the end of the buffer perfectly matches this sequence
+                for (int j = 0; j < seq.Count; j++)
+               {
+                    if (playerBuffer[bufferStartIndex + j] != seq[j])
+                    {
+                        isMatch = false;
+                        break;
+                   }
+               }
 
-    //            if (isMatch) solvedSequences[i] = true;
-    //        }
+                if (isMatch) solvedSequences[i] = true;
+            }
 
-    //        if (!solvedSequences[i]) allSolved = false;
-    //    }
+           if (!solvedSequences[i]) allSolved = false;
+       }
 
-    //    DisplayTargetCodes(); // Refresh UI to show newly solved sequences
+        DisplayTargetCodes(); // Refresh UI to show newly solved sequences
 
-    //    // End Game Conditions
-    //    if (allSolved)
-    //    {
-    //        gameActive = false;
-    //        bufferText.color = Color.green; // Visual win indicator
-    //    }
-    //    else if (playerBuffer.Count >= bufferSize)
-    //    {
-    //        gameActive = false;
-    //        bufferText.color = Color.red; // Visual loss indicator
-    //    }
-    //}
+        // End Game Conditions
+        if (allSolved)
+        {
+            gameActive = false;
+            bufferText.color = Color.green; // Visual win indicator
+        }
+        else if (playerBuffer.Count >= bufferSize)
+        {
+            gameActive = false;
+            bufferText.color = Color.red; // Visual loss indicator
+        }
+    }*/
 }

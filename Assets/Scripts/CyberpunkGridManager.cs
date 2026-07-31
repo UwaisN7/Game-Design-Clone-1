@@ -6,6 +6,8 @@ public class CyberpunkGridManager : MonoBehaviour
 {
     [SerializeField]
     private GameManager gameManager;
+    [SerializeField]
+    private RewardManager rewardManager;
     [Header("Grid Config")]
     public static int gridSize = 5;
     public static int bufferSize = 6;
@@ -45,6 +47,10 @@ public class CyberpunkGridManager : MonoBehaviour
         SpawnGridUI(rawGrid);
         UpdateGridHighlights();
         UpdateBufferUI();
+
+        gameManager.roundLoseScreen.SetActive(false);
+        gameManager.currentState = GameManager.GameState.StartOfGame;
+        rewardManager.upgradeAssigned = false; // Reset upgrade assignment for the new game
     }
 
     void SpawnGridUI(int[,] rawGrid)
@@ -132,7 +138,7 @@ public class CyberpunkGridManager : MonoBehaviour
         }
     }
 
-    void DisplayTargetCodes()
+    void DisplayTargetCodes() 
     {
         string output = "";
         for (int i = 0; i < targetCodes.Count; i++)

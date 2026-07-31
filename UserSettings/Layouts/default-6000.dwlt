@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 772.8
   m_ShowMode: 4
-  m_Title: Console
+  m_Title: Game
   m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -121,14 +121,14 @@ MonoBehaviour:
     y: 424
     width: 1197.6
     height: 292.8
-  m_MinSize: {x: 101, y: 126}
-  m_MaxSize: {x: 4001, y: 4026}
-  m_ActualView: {fileID: 18}
+  m_MinSize: {x: 231, y: 276}
+  m_MaxSize: {x: 10001, y: 10026}
+  m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
   - {fileID: 18}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -569,7 +569,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 503.2
+    y: 448
     width: 1196.6
     height: 266.8
   m_SerializedDataModeController:
@@ -622,7 +622,7 @@ MonoBehaviour:
       m_rawData: 568105584918842676
     m_ExpandedIDs:
     - m_rawData: 0
-    - m_rawData: 568105584918842572
+    - m_rawData: 568105584918842582
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -656,7 +656,7 @@ MonoBehaviour:
       m_rawData: 0
     m_ExpandedIDs:
     - m_rawData: 0
-    - m_rawData: 568105584918842572
+    - m_rawData: 568105584918842582
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -820,8 +820,11 @@ MonoBehaviour:
       m_LastClickedID:
         m_rawData: 0
       m_ExpandedIDs:
+      - m_rawData: 568105589213755946
       - m_rawData: 568105589213756012
       - m_rawData: 568105589213756046
+      - m_rawData: 568105584918841960
+      - m_rawData: 568105584918842002
       - m_rawData: 568105584918842010
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -1474,9 +1477,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 0.11998521, y: -0.3438161, z: -1.8529178}
+    m_Target: {x: 1058.7842, y: 504.9538, z: -3.7230637}
     speed: 2
-    m_Value: {x: 0.11998521, y: -0.3438161, z: -1.8529178}
+    m_Value: {x: 1058.7842, y: 504.9538, z: -3.7230637}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1527,9 +1530,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1.7817463
+    m_Target: 619.69354
     speed: 2
-    m_Value: 1.7817463
+    m_Value: 619.69354
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1692,7 +1695,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 448
+    y: 503.2
     width: 1196.6
     height: 266.8
   m_SerializedDataModeController:
