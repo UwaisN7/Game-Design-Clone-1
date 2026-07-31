@@ -37,8 +37,7 @@ public class GameManager : MonoBehaviour
 
     public readonly int startingRound = 1;
     public int currentRound;
-    private bool roundUIUpdated = false;
-    private bool firstRound = true;
+    private bool roundUIUpdated = false; //bool to check if the round UI has been updated
 
     void Awake()
     {
@@ -56,17 +55,17 @@ public class GameManager : MonoBehaviour
         }
         inputManager = new PlayerInput();
 
-        if(currentRound == 1)//placeholder for now until I get the round reset code working.
+        if(currentRound == 1)
         {
             initialGameTime = 60f;
             gameTime = initialGameTime; // Reset game time to initial value at the start of the game
         }
         else
         {
-            gameTime = initialGameTime; // Keep the game time from the previous round
+            gameTime = initialGameTime; // initialGametime is recalculated in the NextRound() function
         }
-        currentRound = startingRound;
-        roundUIUpdated = false;
+        currentRound = startingRound;//Just to make sure the round starts at 1 and not 0
+        roundUIUpdated = false;//Make sure the round UI is updated at the start of the game
 
     }
 
@@ -88,16 +87,14 @@ public class GameManager : MonoBehaviour
             case GameState.StartOfGame:
                 if (inputManager.Player.Click.triggered)
                 {
-                    Time.timeScale = 1f; // Set the timescale to 1 when the game starts
-                    //Debug.Log("Game has started.");//Yeah this is a placeholder  before we get the grid 
+                    Time.timeScale = 1f; // Set the timescale to 1 when the game starts 
                     currentState = GameState.Playing;
                 }
-                if (roundUIUpdated == false)
+                if (roundUIUpdated == false)// Check if the round UI has been updated, if not update it
                 {
                     UpdateRoundUI();
                     timerText.text = "Time: " + gameTime.ToString("F0");
                 }
-                // Player Inputs and selects a tile the Games timescale is 0 
                 break;
 
             case GameState.Playing:
@@ -107,16 +104,7 @@ public class GameManager : MonoBehaviour
                 {
                     PlayerSelected(int.Parse(selectedValue));
                 }
-                /*if (winScreen != null)
-                {
-                    winScreen.SetActive(false);
-                    Debug.Log("Win screen turned off");
-                }*/
-
                 //This is a test to see if the reward manager is working and communicating with the GM
-                //Debug.Log("Game is in progress.");
-                //Debug.Log("Time remaining: " + gameTime + " seconds");
-
                 //Player selects a tile and the Games timescale is 1 and timer now ticks down
                 break;
 
@@ -134,7 +122,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Game Over! You lose.");
                 Time.timeScale = 0f;
                 loseScreen.SetActive(true);
-                rewardManager.ResetProgress();
+                rewardManager.ResetProgress();//reset the progress + upgrades in the RewardManager when the player loses
 
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
                 break;
@@ -184,7 +172,7 @@ public class GameManager : MonoBehaviour
     {
         currentState = GameState.Lose;
         gameTime = initialGameTime; // Reset the game time to the initial value
-        currentRound = startingRound; // Reset the current round to the starting round
+        currentRound = startingRound; // Reset the current round to the starting round (1)
         rewardManager.ResetProgress(); // Reset the progress + upgrades in the RewardManager
 
     }
@@ -196,9 +184,7 @@ public class GameManager : MonoBehaviour
         Application.Quit();
         Debug.Log("Quit function working");
         rewardManager.ResetProgress();
-
     }
-
     public void QuitToMainMenu()
     {
         currentState = GameState.Lose;
@@ -221,16 +207,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         pauseScreen.SetActive(false);
     }
-
     public void NextRound()
     {
         roundUIUpdated = false;
-        //roundCountText.text = "Round: " + currentRound.ToString();
         winScreen.SetActive(false);
+
         currentRound += 1;
-        Debug.Log("Round " + currentRound + " started");
         initialGameTime -= (gameTime * 0.1f);
-        Debug.Log("Time reduced by " + (gameTime * 0.1f) + " seconds");
         gameTime = initialGameTime;
 
         gridManager.StartGame();

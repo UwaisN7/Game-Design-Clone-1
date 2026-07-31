@@ -74,7 +74,6 @@ public class RewardManager : MonoBehaviour
 
     public void ResetProgress()
     {
-        //GameManager.currentRound = 1;
         GameManager.initialGameTime = 60f;
         CyberpunkGridManager.gridSize = 5;
         CyberpunkGridManager.bufferSize = 6;

@@ -750,8 +750,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 29, y: -57.7739}
-  m_SizeDelta: {x: 255.528, y: 34.4521}
+  m_AnchoredPosition: {x: 33.9, y: -57.7739}
+  m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &942688855
 MonoBehaviour:
@@ -773,7 +773,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: RoundTracking UI
+  m_text: Round UI
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1108,9 +1108,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7555038334132592328}
     - target: {fileID: 4286686695623257034, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286686695623257034, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286686695623257034, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7555038334132592328}
+    - target: {fileID: 4286686695623257034, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286686695623257034, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4474653732711210338, guid: a3e591ccefc531f418f1e759eb4d5981, type: 3}
       propertyPath: m_Pivot.x
       value: 0
