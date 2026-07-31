@@ -92,8 +92,8 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.Playing:
+                Time.timeScale = 1f;
                 Timer();
-
                 if (inputManager.Player.Click.triggered)
                 {
                     PlayerSelected(int.Parse(selectedValue));
@@ -209,39 +209,18 @@ public class GameManager : MonoBehaviour
     }
 
     public void NextRound()
-    {
-        //winScreen.SetActive(false);
-        //Debug.Log("Win screen turned off");
+    { 
         currentState= GameState.Playing;
 
         currentRound += 1;
         Debug.Log("Round " + currentRound + " started");
         initialGameTime -= (gameTime * 0.1f);
         Debug.Log("Time reduced by " + (gameTime * 0.1f) + " seconds");
+        gameTime = initialGameTime;
+
         gridManager.StartGame();
 
     }
-
-    /*public void TurnWinScreenOff()
-    {
-        if (winScreen.activeSelf)
-        {
-            winScreen.SetActive(false);
-            Debug.Log("Win screen turned off");
-        }
-
-        if(winScreen != null)
-        {
-            winScreen.SetActive(false);
-            Debug.Log("Win screen turned off");
-        }
-        
-
-    }*/
-
-    
-
-
     //Grid generator and reward system will be added here in the future
 
     public void PlayerSelected(int selectedValue)
