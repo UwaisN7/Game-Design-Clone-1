@@ -14,7 +14,7 @@ public class RewardManager : MonoBehaviour
     public int playerLives = 3;
 
     [SerializeField] private int correctAnswer = 7;      //This is a test but the correct answers are stored here and will change when u do random
-    [SerializeField] private int additionalTime;
+    [SerializeField] private int additionalTime = 5;
 
     //public List<int> upgradeNumberPool = new List<int> { 1, 2, 3};
     public bool upgradeAssigned = false;
@@ -31,25 +31,29 @@ public class RewardManager : MonoBehaviour
 
         playerLives = 3;
     }
-public void IncreaseGridSize() // Inreases grid size by one row and column. Gives additional time
+    void IncreaseGridSize() // Inreases grid size by one row and column. Gives additional time
     {
         if (CyberpunkGridManager.gridSize <= 8)
         {
             CyberpunkGridManager.gridSize +=1 ; 
         }
-        gameManager.gameTime += additionalTime;
+        //AdditionalTime(); // Add additional time when grid size increases
     }
-    public void IncreaseBufferLength() //Increase the amount of "incorrect" selections the player is allowed to make
+    void IncreaseBufferLength() //Increase the amount of "incorrect" selections the player is allowed to make
     {
         CyberpunkGridManager.bufferSize++;
     }
-    public void AddPlayerLife()
+    void AddPlayerLife()
     {
         if (playerLives < 4 )
         {
             playerLives++;
         }   
     }
+    /*void AdditionalTime()
+    {
+        gameManager.gameTime += additionalTime;
+    }*/
 
     public void ResetProgress()
     {
@@ -63,9 +67,10 @@ public void IncreaseGridSize() // Inreases grid size by one row and column. Give
     {
         if (upgradeAssigned == false)
         {
-            //IncreaseBufferLength();
-            AddPlayerLife();
-            //IncreaseGridSize();
+            //IncreaseBufferLength(); //Functional
+            //AddPlayerLife(); //Functional
+            //IncreaseGridSize(); //not functional
+            //AdditionalTime(); //not funtional
             upgradeAssigned = true; // Mark that an upgrade has been assigned
         }
         
