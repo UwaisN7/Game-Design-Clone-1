@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
         Playing,
         Paused,
         Win,
-        Lose
+        Lose,
     }
     public GameState currentState;
     public GameObject winScreen;
@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public GameObject pauseScreen;
     [SerializeField]
     private RewardManager rewardManager;
+    public CyberpunkGridManager gridManager;
     //public bool gamePaused;
 
     public string selectedValue;
@@ -96,6 +97,11 @@ public class GameManager : MonoBehaviour
                 if (inputManager.Player.Click.triggered)
                 {
                     PlayerSelected(int.Parse(selectedValue));
+                }
+                if (winScreen != null)
+                {
+                    winScreen.SetActive(false);
+                    Debug.Log("Win screen turned off");
                 }
 
                 //This is a test to see if the reward manager is working and communicating with the GM
@@ -204,11 +210,34 @@ public class GameManager : MonoBehaviour
 
     public void NextRound()
     {
+        //winScreen.SetActive(false);
+        //Debug.Log("Win screen turned off");
+        currentState= GameState.Playing;
+
         currentRound += 1;
         Debug.Log("Round " + currentRound + " started");
         initialGameTime -= (gameTime * 0.1f);
         Debug.Log("Time reduced by " + (gameTime * 0.1f) + " seconds");
+        gridManager.StartGame();
+
     }
+
+    /*public void TurnWinScreenOff()
+    {
+        if (winScreen.activeSelf)
+        {
+            winScreen.SetActive(false);
+            Debug.Log("Win screen turned off");
+        }
+
+        if(winScreen != null)
+        {
+            winScreen.SetActive(false);
+            Debug.Log("Win screen turned off");
+        }
+        
+
+    }*/
 
     
 

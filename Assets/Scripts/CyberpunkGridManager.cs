@@ -27,6 +27,7 @@ public class CyberpunkGridManager : MonoBehaviour
     private bool gameActive = false;
     private bool[] solvedSequences;
 
+
     void Start() => StartGame();
 
     public void StartGame()
