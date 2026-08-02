@@ -597,8 +597,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82a60860170c30409e23372a7517d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RewardManager
+  gridManager: {fileID: 695364665}
   playerLives: 0
-  correctAnswer: 50
   additionalTime: 0
   upgradeAssigned: 0
 --- !u!4 &756284627

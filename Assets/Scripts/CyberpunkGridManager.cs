@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 using TMPro;
+using UnityEngine;
 
 public class CyberpunkGridManager : MonoBehaviour
 {
@@ -76,7 +77,7 @@ public class CyberpunkGridManager : MonoBehaviour
 
         clickedCell.MarkAsUsed();
         gameManager.PlayerSelected(clickedCell.Code);
-        playerBuffer.Add(clickedCell.Code);
+     
 
         if (firstMove)
         {
@@ -104,7 +105,7 @@ public class CyberpunkGridManager : MonoBehaviour
         // These should happen EVERY click
         UpdateGridHighlights();
         UpdateBufferUI();
-        CheckForMatches();
+     
     }
 
     void UpdateGridHighlights()
@@ -163,8 +164,7 @@ public class CyberpunkGridManager : MonoBehaviour
         bufferText.text = string.Join("  ", playerBuffer);
     }
 
-    void CheckForMatches() //This should be deleted when the reward manager is implemented because it does the same thing as the reward manager
-        //I put it in the reward manager
+    void CheckForMatches() 
     {
         bool allSolved = true;
 
@@ -198,17 +198,31 @@ public class CyberpunkGridManager : MonoBehaviour
 
         DisplayTargetCodes(); // Refresh UI to show newly solved sequences
 
-        // End Game Conditions
-        if (allSolved)
+        bool atLeastOneSolved = false;
+
+        for (int i = 0; i < solvedSequences.Length; i++)
+        {
+            if (solvedSequences[i])
+            {
+                atLeastOneSolved = true;
+                break;
+            }
+        }
+
+        // Win as soon as ANY reward sequence is completed
+        if (atLeastOneSolved && playerBuffer.Count >= bufferSize)
         {
             gameManager.Win();
-            bufferText.color = Color.green; // Visual win indicator
+            bufferText.color = Color.green;
         }
+
+        // Lose only if the player filled the buffer
+        // without completing ANY reward
         else if (playerBuffer.Count >= bufferSize)
         {
             gameManager.Lose();
             gameActive = false;
-            bufferText.color = Color.red; // Visual loss indicator
+            bufferText.color = Color.red;
         }
     }
 
@@ -258,8 +272,14 @@ public class CyberpunkGridManager : MonoBehaviour
             grid[pos.x, pos.y] = val;
         }
 
-        if (pathValues.Count >= 2) sequences.Add(pathValues.GetRange(0, 2));
-        if (pathValues.Count >= 4) sequences.Add(pathValues.GetRange(1, 3));
+        if (pathValues.Count >= 2)
+            sequences.Add(pathValues.GetRange(0, 2));
+
+        if (pathValues.Count >= 4)
+            sequences.Add(pathValues.GetRange(1, 3));
+
+        if (pathValues.Count >= 6)
+            sequences.Add(pathValues.GetRange(3, 3));
 
         for (int x = 0; x < gridSize; x++)
         {
@@ -268,5 +288,15 @@ public class CyberpunkGridManager : MonoBehaviour
                 if (grid[x, y] == 0) grid[x, y] = codePool[Random.Range(0, codePool.Length)];
             }
         }
+    }
+    public bool ValidateSelection(int value)
+    {
+        playerBuffer.Add(value);
+
+        UpdateBufferUI();
+
+        CheckForMatches();
+
+        return solvedSequences.All(x => x);
     }
 }
