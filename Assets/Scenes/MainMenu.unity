@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 2672070502174212950}
   - component: {fileID: 5092396039113976470}
   m_Layer: 5
-  m_Name: ' Game Title'
+  m_Name: Game Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -845,7 +845,10 @@ MonoBehaviour:
   loseScreen: {fileID: 0}
   timerText: {fileID: 0}
   pauseScreen: {fileID: 0}
+  rewardManager: {fileID: 0}
+  selectedValue: 
   gameTime: 10
+  round: 0
 --- !u!1 &4871860559445263480
 GameObject:
   m_ObjectHideFlags: 0
