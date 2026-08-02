@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
                 Timer();
                 if (inputManager.Player.Click.triggered)
                 {
-                    PlayerSelected(int.Parse(selectedValue));
+                    
                 }
                 //This is a test to see if the reward manager is working and communicating with the GM
                 //Player selects a tile and the Games timescale is 1 and timer now ticks down

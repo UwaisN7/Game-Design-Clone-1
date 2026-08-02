@@ -9,11 +9,11 @@ using UnityEngine.LightTransport;
 public class RewardManager : MonoBehaviour
 {
     private GameManager gameManager;
-    private CyberpunkGridManager gridManager;
+   [SerializeField] private CyberpunkGridManager gridManager;
 
     public int playerLives = 3;
 
-    [SerializeField] private int correctAnswer = 7;      //This is a test but the correct answers are stored here and will change when u do random
+   
     [SerializeField] private int additionalTime = 5;
 
     //public List<int> upgradeNumberPool = new List<int> { 1, 2, 3};
@@ -76,29 +76,10 @@ public class RewardManager : MonoBehaviour
         
     }
 
-//This is a test function to check this will communicate with the GM make sure this is last in the script
-    public bool CheckSelection(int selectedValue)
+    //This is a test function to check this will communicate with the GM make sure this is last in the script
+    public bool CheckSelection(int value)
     {
-        //Debug.Log("Received " + selectedValue);
-
-        if (selectedValue == correctAnswer)
-        {
-            Debug.Log("Correct!");
-            return true;
-        }
-
-        Debug.Log("Not part of the reward.");
-        if (gameManager != null)
-        {
-            Debug.Log("Calling Lose() on GameManager.Piece of crap works ");
-            gameManager.Lose();
-        }
-        else
-        {
-            Debug.LogWarning("GameManager reference is null. Cannot call Lose().im dumb");
-        }
-        
-        return false;
+        return gridManager.ValidateSelection(value);
     }
 
     //Ok bro when you see this comment (this is tira's work you can use it if you want or do ur own thing just want  to give you options)
