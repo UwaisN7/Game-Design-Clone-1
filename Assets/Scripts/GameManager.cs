@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI roundCountText;
     public TextMeshProUGUI livesText;
+    public GameObject instructionPanel;
 
     public GameObject pauseScreen;
     [SerializeField]
@@ -55,6 +56,11 @@ public class GameManager : MonoBehaviour
         if (roundLoseScreen != null)
         {
             roundLoseScreen.SetActive(false);
+           
+        }
+        if (instructionPanel != null)
+        {
+            instructionPanel.SetActive(false);
         }
         if (timerText != null)
         {
@@ -104,6 +110,7 @@ public class GameManager : MonoBehaviour
                     UpdateRoundUI();
                     timerText.text = "Time: " + gameTime.ToString("F0");
                 }
+                instructionPanel.SetActive(true);
                 break;
 
 
@@ -114,6 +121,7 @@ public class GameManager : MonoBehaviour
                 {
                     
                 }
+                instructionPanel.SetActive(true);
                 //This is a test to see if the reward manager is working and communicating with the GM
                 //Player selects a tile and the Games timescale is 1 and timer now ticks down
                 break;
@@ -122,15 +130,20 @@ public class GameManager : MonoBehaviour
                 //Player selects esc the timescale is 0 and the game is paused
                 Time.timeScale = 0f;
                 pauseScreen.SetActive(true);
+                instructionPanel.SetActive(false);
+
                 break;
             case GameState.Win:
                 //Player gets the rewards and wins the game and the win screen is displayed timescale is 0
                 Time.timeScale = 0f;
                 winScreen.SetActive(true);
+                instructionPanel.SetActive(true);
+
                 break;
             case GameState.Lose:
                 Time.timeScale = 0f;
                 loseScreen.SetActive(true);
+                instructionPanel.SetActive(false);
                 rewardManager.ResetProgress();//reset the progress + upgrades in the RewardManager when the player loses
 
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
