@@ -8,142 +8,70 @@ using UnityEngine.LightTransport;
 
 public class RewardManager : MonoBehaviour
 {
-    private GameManager gameManager;
-   [SerializeField] private CyberpunkGridManager gridManager;
+   public GameManager gameManager;
+   public CyberpunkGridManager gridManager;
 
-    public int playerLives = 3;
-
-   
+    public int playerLives = 2;
     [SerializeField] private int additionalTime = 5;
-
-    //public List<int> upgradeNumberPool = new List<int> { 1, 2, 3};
-    public bool upgradeAssigned = false;
-
-
-
-    //So like the logic for randomising numbers will be here 
 
     private void Start()
     {
-        gameManager = FindAnyObjectByType<GameManager>();
-        gridManager = FindAnyObjectByType<CyberpunkGridManager>();
-        upgradeAssigned = false;
-
-        playerLives = 3;
+        playerLives = 2;
     }
 
-    public void RewardCompleted(int rewardIndex)
+    // Call this from GridManager
+    public void GrantSequenceReward(int sequenceIndex, int sequenceLength)
     {
-        Debug.Log("Reward " + rewardIndex + " completed!");
-
-        // Change reward UI colour here
-        // Give upgrade if needed
-    }
-    void IncreaseGridSize() // Inreases grid size by one row and column. Gives additional time
-    {
-        if (CyberpunkGridManager.gridSize <= 8)
+        
+        switch (sequenceIndex)
         {
-            CyberpunkGridManager.gridSize +=1 ; 
+            case 0:
+                AddTime(); 
+                Debug.Log($"Added {additionalTime} seconds to the game time.");
+                break;
+            case 1:
+                AddPlayerLife(); 
+                gameManager.livesText.text = "Lives: " + playerLives.ToString();
+                Debug.Log($"Player lives increased to {playerLives}.");
+                break;
+            case 2:
+                IncreaseBufferLength();
+                Debug.Log($"Buffer size increased to {CyberpunkGridManager.bufferSize}.");
+                break;
+            default:
+                Debug.Log($"Sequence {sequenceIndex} solved!");
+                break;
         }
-        //AdditionalTime(); // Add additional time when grid size increases
     }
-    void IncreaseBufferLength() //Increase the amount of "incorrect" selections the player is allowed to make
+    
+    private void IncreaseBufferLength() //Increase the amount of "incorrect" selections the player is allowed to make
     {
         CyberpunkGridManager.bufferSize++;
     }
-    void AddPlayerLife()
+    private void AddPlayerLife()
     {
         if (playerLives < 4 )
         {
             playerLives++;
         }   
     }
-    /*void AdditionalTime()
+    void AddTime()
     {
-        gameManager.gameTime += additionalTime;
-    }*/
+        GameManager.initialGameTime += additionalTime;
+    }
 
     public void ResetProgress()
     {
-        GameManager.initialGameTime = 60f;
+        GameManager.initialGameTime = 30f;
         CyberpunkGridManager.gridSize = 5;
         CyberpunkGridManager.bufferSize = 6;
         Debug.Log("Progress Reset");
     }
-
-    public void UpgradeSelector() //Test funcion cause I just want to make sure the upgrades are working with the grid manager.
-    {
-        if (upgradeAssigned == false)
-        {
-            //IncreaseBufferLength(); //Functional
-            //AddPlayerLife(); //Functional
-            //IncreaseGridSize(); //not functional
-            //AdditionalTime(); //not funtional
-            upgradeAssigned = true; // Mark that an upgrade has been assigned
-        }
-        
-    }
-
     //This is a test function to check this will communicate with the GM make sure this is last in the script
     public bool CheckSelection(int value)
     {
         return gridManager.ValidateSelection(value);
     }
 
-    //Ok bro when you see this comment (this is tira's work you can use it if you want or do ur own thing just want  to give you options)
 
-    //Basically below is a  reward manager thats on the grid system script.so if u wanna reuse it you are going to have to replace variables 
-    //It does not work in its curret state
-
-    //And when you are done be sure to delete this code within the grid manager script because it might cause conflicts with your work...
-
-    //So it does everything we want so thats why i feel like it shoudl be looked at.
-
-
-    /*public void CheckForMatches()
-    {
-        bool allSolved = true;
-
-       for (int i = 0; i < targetCodes.Count; i++)
-        {
-            if (solvedSequences[i]) continue; // Skip if already solved
-
-            List<int> seq = targetCodes[i];
-
-            // Only check if the buffer has enough numbers to form the sequence
-           if (playerBuffer.Count >= seq.Count)
-           {
-                bool isMatch = true;
-                int bufferStartIndex = playerBuffer.Count - seq.Count;
-
-               // Check if the end of the buffer perfectly matches this sequence
-                for (int j = 0; j < seq.Count; j++)
-               {
-                    if (playerBuffer[bufferStartIndex + j] != seq[j])
-                    {
-                        isMatch = false;
-                        break;
-                   }
-               }
-
-                if (isMatch) solvedSequences[i] = true;
-            }
-
-           if (!solvedSequences[i]) allSolved = false;
-       }
-
-        DisplayTargetCodes(); // Refresh UI to show newly solved sequences
-
-        // End Game Conditions
-        if (allSolved)
-        {
-            gameActive = false;
-            bufferText.color = Color.green; // Visual win indicator
-        }
-        else if (playerBuffer.Count >= bufferSize)
-        {
-            gameActive = false;
-            bufferText.color = Color.red; // Visual loss indicator
-        }
-    }*/
 }

@@ -51,7 +51,6 @@ public class CyberpunkGridManager : MonoBehaviour
 
         gameManager.roundLoseScreen.SetActive(false);
         gameManager.currentState = GameManager.GameState.StartOfGame;
-        rewardManager.upgradeAssigned = false; // Reset upgrade assignment for the new game
     }
 
     void SpawnGridUI(int[,] rawGrid)
@@ -104,7 +103,7 @@ public class CyberpunkGridManager : MonoBehaviour
 
         // These should happen EVERY click
         UpdateGridHighlights();
-        UpdateBufferUI();
+        //UpdateBufferUI();
      
     }
 
@@ -190,8 +189,14 @@ public class CyberpunkGridManager : MonoBehaviour
                     }
                 }
 
-                if (isMatch) { solvedSequences[i] = true;
-                    rewardManager.RewardCompleted(i);
+                if (isMatch)
+                {
+                    solvedSequences[i] = true;
+
+                    if (rewardManager != null)
+                    {
+                        rewardManager.GrantSequenceReward(i, seq.Count);
+                    }
                 }
             }
 
@@ -199,33 +204,31 @@ public class CyberpunkGridManager : MonoBehaviour
         }
 
         DisplayTargetCodes(); // Refresh UI to show newly solved sequences
+        bool allSequencesSolved = solvedSequences.All(x => x);
+        bool bufferFull = playerBuffer.Count >= bufferSize;
 
-        bool atLeastOneSolved = false;
+        bool atLeastOneSolved = solvedSequences.Any(x => x);
 
-        for (int i = 0; i < solvedSequences.Length; i++)
+        // The game ONLY ends when the buffer is completely filled 
+        // OR if the player  solves every sequence available.
+        if (bufferFull || allSolved)
         {
-            if (solvedSequences[i])
+            if (atLeastOneSolved)
             {
-                atLeastOneSolved = true;
-                break;
+                // Player completed 1 or more sequences before running out of buffer space
+                bufferText.color = Color.green;
+                gameManager.Win();
             }
-        }
+            else
+            {
+                // Buffer is full and 0 sequences were completed
+                bufferText.color = Color.red;
+                gameManager.Lose();
+            }
 
-        // Win as soon as ANY reward sequence is completed
-        if (atLeastOneSolved && playerBuffer.Count >= bufferSize)
-        {
-            gameManager.Win();
-            bufferText.color = Color.green;
-        }
-
-        // Lose only if the player filled the buffer
-        // without completing ANY reward
-        else if (playerBuffer.Count >= bufferSize)
-        {
-            gameManager.Lose();
             gameActive = false;
-            bufferText.color = Color.red;
         }
+
     }
 
     void GeneratePuzzleData(out int[,] grid, out List<List<int>> sequences)
@@ -291,6 +294,27 @@ public class CyberpunkGridManager : MonoBehaviour
             }
         }
     }
+
+    public void OnTimeExpired()
+    {
+        // Don't re-trigger if the round is already over
+        if (gameManager.currentState != GameManager.GameState.Playing) return;
+
+        // Check if player solved at least 1 sequence before time ran out
+        bool atLeastOneSolved = solvedSequences != null && solvedSequences.Any(x => x);
+
+        if (atLeastOneSolved)
+        {
+            bufferText.color = Color.green;
+            gameManager.Win();
+        }
+        else
+        {
+            bufferText.color = Color.red;
+            gameManager.Lose();
+        }
+    }
+
     public bool ValidateSelection(int value)
     {
         playerBuffer.Add(value);
