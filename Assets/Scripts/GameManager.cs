@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         }
         if (roundLoseScreen != null)
         {
-            loseScreen.SetActive(false);
+            roundLoseScreen.SetActive(false);
         }
         if (timerText != null)
         {
@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
         }
         currentRound = startingRound;//Just to make sure the round starts at 1 and not 0
         roundUIUpdated = false;//Make sure the round UI is updated at the start of the game
+        rewardManager.playerLives = 2; // Reset player lives to 2 at the start of the game
 
     }
 
@@ -86,11 +87,7 @@ public class GameManager : MonoBehaviour
     {
         inputManager.Disable();
     }
-
-    private void Start()
-    {
-        rewardManager.playerLives = 3; // Reset player lives to 3 at the start of the game
-    }
+    
     void Update()
     {
         switch (currentState)
@@ -132,7 +129,6 @@ public class GameManager : MonoBehaviour
                 winScreen.SetActive(true);
                 break;
             case GameState.Lose:
-                Debug.Log("Game Over! You lose.");
                 Time.timeScale = 0f;
                 loseScreen.SetActive(true);
                 rewardManager.ResetProgress();//reset the progress + upgrades in the RewardManager when the player loses
@@ -140,7 +136,6 @@ public class GameManager : MonoBehaviour
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
                 break;
              case GameState.FailedRound:
-                Debug.Log("Round Failed! You lose a life.");
                 Time.timeScale = 0f;
                 break;
         }
@@ -170,7 +165,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Lose();
+            gameTime = 0;
+            timerText.text = "Time: 0";
+
+            // When time expires, evaluate win/loss based on completed sequences
+            if (gridManager != null)
+            {
+                gridManager.OnTimeExpired();
+            }
         }
     }
     public void UpdateRoundUI()

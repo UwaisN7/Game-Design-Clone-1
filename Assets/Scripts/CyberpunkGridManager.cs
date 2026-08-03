@@ -207,23 +207,28 @@ public class CyberpunkGridManager : MonoBehaviour
         bool allSequencesSolved = solvedSequences.All(x => x);
         bool bufferFull = playerBuffer.Count >= bufferSize;
 
-        if (allSequencesSolved || bufferFull)
-        {
-            bool atLeastOneSolved = solvedSequences.Any(x => x);
+        bool atLeastOneSolved = solvedSequences.Any(x => x);
 
+        // The game ONLY ends when the buffer is completely filled 
+        // OR if the player  solves every sequence available.
+        if (bufferFull || allSolved)
+        {
             if (atLeastOneSolved)
             {
-                gameManager.Win();
+                // Player completed 1 or more sequences before running out of buffer space
                 bufferText.color = Color.green;
+                gameManager.Win();
             }
-            else if (bufferFull)
+            else
             {
-                gameManager.Lose();
-                gameActive = false;
+                // Buffer is full and 0 sequences were completed
                 bufferText.color = Color.red;
+                gameManager.Lose();
             }
+
+            gameActive = false;
         }
-        
+
     }
 
     void GeneratePuzzleData(out int[,] grid, out List<List<int>> sequences)
@@ -289,6 +294,27 @@ public class CyberpunkGridManager : MonoBehaviour
             }
         }
     }
+
+    public void OnTimeExpired()
+    {
+        // Don't re-trigger if the round is already over
+        if (gameManager.currentState != GameManager.GameState.Playing) return;
+
+        // Check if player solved at least 1 sequence before time ran out
+        bool atLeastOneSolved = solvedSequences != null && solvedSequences.Any(x => x);
+
+        if (atLeastOneSolved)
+        {
+            bufferText.color = Color.green;
+            gameManager.Win();
+        }
+        else
+        {
+            bufferText.color = Color.red;
+            gameManager.Lose();
+        }
+    }
+
     public bool ValidateSelection(int value)
     {
         playerBuffer.Add(value);

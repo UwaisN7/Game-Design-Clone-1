@@ -597,10 +597,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82a60860170c30409e23372a7517d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RewardManager
+  gameManager: {fileID: 7555038334132592328}
   gridManager: {fileID: 695364665}
   playerLives: 0
-  additionalTime: 0
-  upgradeAssigned: 0
+  additionalTime: 5
 --- !u!4 &756284627
 Transform:
   m_ObjectHideFlags: 0
@@ -809,7 +809,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2382258574662329706, guid: 880f3545075cfdf4696e4d34ae85328a, type: 3}
       propertyPath: gameTime
-      value: 55
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2382258574662329706, guid: 880f3545075cfdf4696e4d34ae85328a, type: 3}
       propertyPath: livesText

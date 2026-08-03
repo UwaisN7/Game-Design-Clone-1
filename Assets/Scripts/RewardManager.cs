@@ -11,12 +11,12 @@ public class RewardManager : MonoBehaviour
    public GameManager gameManager;
    public CyberpunkGridManager gridManager;
 
-    public int playerLives = 3;
+    public int playerLives = 2;
     [SerializeField] private int additionalTime = 5;
 
     private void Start()
     {
-        playerLives = 3;
+        playerLives = 2;
     }
 
     // Call this from GridManager
