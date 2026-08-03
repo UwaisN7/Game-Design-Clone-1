@@ -51,7 +51,6 @@ public class CyberpunkGridManager : MonoBehaviour
 
         gameManager.roundLoseScreen.SetActive(false);
         gameManager.currentState = GameManager.GameState.StartOfGame;
-        rewardManager.upgradeAssigned = false; // Reset upgrade assignment for the new game
     }
 
     void SpawnGridUI(int[,] rawGrid)
@@ -104,7 +103,7 @@ public class CyberpunkGridManager : MonoBehaviour
 
         // These should happen EVERY click
         UpdateGridHighlights();
-        UpdateBufferUI();
+        //UpdateBufferUI();
      
     }
 
@@ -190,40 +189,41 @@ public class CyberpunkGridManager : MonoBehaviour
                     }
                 }
 
-                if (isMatch) solvedSequences[i] = true;
+                if (isMatch)
+                {
+                    solvedSequences[i] = true;
+
+                    if (rewardManager != null)
+                    {
+                        rewardManager.GrantSequenceReward(i, seq.Count);
+                    }
+                }
             }
 
             if (!solvedSequences[i]) allSolved = false;
         }
 
         DisplayTargetCodes(); // Refresh UI to show newly solved sequences
+        bool allSequencesSolved = solvedSequences.All(x => x);
+        bool bufferFull = playerBuffer.Count >= bufferSize;
 
-        bool atLeastOneSolved = false;
-
-        for (int i = 0; i < solvedSequences.Length; i++)
+        if (allSequencesSolved || bufferFull)
         {
-            if (solvedSequences[i])
+            bool atLeastOneSolved = solvedSequences.Any(x => x);
+
+            if (atLeastOneSolved)
             {
-                atLeastOneSolved = true;
-                break;
+                gameManager.Win();
+                bufferText.color = Color.green;
+            }
+            else if (bufferFull)
+            {
+                gameManager.Lose();
+                gameActive = false;
+                bufferText.color = Color.red;
             }
         }
-
-        // Win as soon as ANY reward sequence is completed
-        if (atLeastOneSolved && playerBuffer.Count >= bufferSize)
-        {
-            gameManager.Win();
-            bufferText.color = Color.green;
-        }
-
-        // Lose only if the player filled the buffer
-        // without completing ANY reward
-        else if (playerBuffer.Count >= bufferSize)
-        {
-            gameManager.Lose();
-            gameActive = false;
-            bufferText.color = Color.red;
-        }
+        
     }
 
     void GeneratePuzzleData(out int[,] grid, out List<List<int>> sequences)

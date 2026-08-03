@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     public float gameTime; // Total game time in seconds
-    public static float initialGameTime = 60f; // Initial game time for reference
+    public static float initialGameTime = 30f; // Initial game time for reference
 
     public readonly int startingRound = 1;
     public int currentRound;
@@ -183,7 +183,6 @@ public class GameManager : MonoBehaviour
     public void Win()
     {
         currentState = GameState.Win;
-        rewardManager.UpgradeSelector(); // Call the UpgradeRandomiser function in the RewardManager when the player wins
     }
 
     public void Lose()
