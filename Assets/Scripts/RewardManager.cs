@@ -31,6 +31,14 @@ public class RewardManager : MonoBehaviour
 
         playerLives = 3;
     }
+
+    public void RewardCompleted(int rewardIndex)
+    {
+        Debug.Log("Reward " + rewardIndex + " completed!");
+
+        // Change reward UI colour here
+        // Give upgrade if needed
+    }
     void IncreaseGridSize() // Inreases grid size by one row and column. Gives additional time
     {
         if (CyberpunkGridManager.gridSize <= 8)

@@ -190,7 +190,9 @@ public class CyberpunkGridManager : MonoBehaviour
                     }
                 }
 
-                if (isMatch) solvedSequences[i] = true;
+                if (isMatch) { solvedSequences[i] = true;
+                    rewardManager.RewardCompleted(i);
+                }
             }
 
             if (!solvedSequences[i]) allSolved = false;
