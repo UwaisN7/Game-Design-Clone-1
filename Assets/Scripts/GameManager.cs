@@ -1,7 +1,10 @@
+using JetBrains.Annotations;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,23 +14,33 @@ public class GameManager : MonoBehaviour
         Playing,
         Paused,
         Win,
-        Lose
+        Lose,
+        FailedRound
     }
     public GameState currentState;
     public GameObject winScreen;
     public GameObject loseScreen;
+    public GameObject roundLoseScreen;
     private PlayerInput inputManager;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI roundCountText;
+    public TextMeshProUGUI livesText;
 
     public GameObject pauseScreen;
     [SerializeField]
     private RewardManager rewardManager;
+    public CyberpunkGridManager gridManager;
     //public bool gamePaused;
 
     public string selectedValue;
 
     [SerializeField]
-    private float gameTime = 60f; // Total game time in seconds
+    public float gameTime; // Total game time in seconds
+    public static float initialGameTime = 60f; // Initial game time for reference
+
+    public readonly int startingRound = 1;
+    public int currentRound;
+    private bool roundUIUpdated = false; //bool to check if the round UI has been updated
 
     void Awake()
     {
@@ -39,12 +52,28 @@ public class GameManager : MonoBehaviour
         {
             loseScreen.SetActive(false);
         }
+        if (roundLoseScreen != null)
+        {
+            loseScreen.SetActive(false);
+        }
         if (timerText != null)
         {
             timerText.text = "Time: " + gameTime.ToString("F0") + "s";
         }
         inputManager = new PlayerInput();
 
+        if(currentRound == 1)
+        {
+            initialGameTime = 60f;
+            gameTime = initialGameTime; // Reset game time to initial value at the start of the game
+            
+        }
+        else
+        {
+            gameTime = initialGameTime; // initialGametime is recalculated in the NextRound() function
+        }
+        currentRound = startingRound;//Just to make sure the round starts at 1 and not 0
+        roundUIUpdated = false;//Make sure the round UI is updated at the start of the game
 
     }
 
@@ -58,47 +87,61 @@ public class GameManager : MonoBehaviour
         inputManager.Disable();
     }
 
-
+    private void Start()
+    {
+        rewardManager.playerLives = 3; // Reset player lives to 3 at the start of the game
+    }
     void Update()
     {
         switch (currentState)
         {
             case GameState.StartOfGame:
+                livesText.text = "Lives: " + rewardManager.playerLives.ToString();
                 if (inputManager.Player.Click.triggered)
                 {
-                    Time.timeScale = 1f; // Set the timescale to 1 when the game starts
-                    Debug.Log("Game has started.");//Yeah this is a placeholder  before we get the grid 
+                    Time.timeScale = 1f; // Set the timescale to 1 when the game starts 
                     currentState = GameState.Playing;
                 }
-
-                // Player Inputs and selects a tile the Games timescale is 0 
+                if (roundUIUpdated == false)// Check if the round UI has been updated, if not update it
+                {
+                    UpdateRoundUI();
+                    timerText.text = "Time: " + gameTime.ToString("F0");
+                }
                 break;
 
-            case GameState.Playing:
-                Timer();
 
+            case GameState.Playing:
+                Time.timeScale = 1f;
+                Timer();
                 if (inputManager.Player.Click.triggered)
                 {
-                    PlayerSelected(int.Parse(selectedValue));
+                    
                 }
-
                 //This is a test to see if the reward manager is working and communicating with the GM
-                //Debug.Log("Game is in progress.");
-                //Debug.Log("Time remaining: " + gameTime + " seconds");
-
                 //Player selects a tile and the Games timescale is 1 and timer now ticks down
                 break;
 
             case GameState.Paused:
                 //Player selects esc the timescale is 0 and the game is paused
+                Time.timeScale = 0f;
+                pauseScreen.SetActive(true);
                 break;
             case GameState.Win:
                 //Player gets the rewards and wins the game and the win screen is displayed timescale is 0
+                Time.timeScale = 0f;
+                winScreen.SetActive(true);
                 break;
             case GameState.Lose:
                 Debug.Log("Game Over! You lose.");
+                Time.timeScale = 0f;
+                loseScreen.SetActive(true);
+                rewardManager.ResetProgress();//reset the progress + upgrades in the RewardManager when the player loses
 
                 //Player runs out of time or number of turns and the lose screen is displayed timescale is 0
+                break;
+             case GameState.FailedRound:
+                Debug.Log("Round Failed! You lose a life.");
+                Time.timeScale = 0f;
                 break;
         }
 
@@ -130,25 +173,43 @@ public class GameManager : MonoBehaviour
             Lose();
         }
     }
+    public void UpdateRoundUI()
+    {
+        roundCountText.text = "Round: " + currentRound.ToString();
+        roundUIUpdated = true;
+    }
 
 
     public void Win()
     {
-
         currentState = GameState.Win;
-
-        Time.timeScale = 0f;
-
-        winScreen.SetActive(true);
+        rewardManager.UpgradeSelector(); // Call the UpgradeRandomiser function in the RewardManager when the player wins
     }
 
     public void Lose()
     {
-        currentState = GameState.Lose;
-
-        Time.timeScale = 0f;
-
+        if(rewardManager.playerLives == 1)
+        {
+            LoseRun();
+        }
+        else
+        {
+            roundLoseScreen.SetActive(true);
+            currentState = GameState.FailedRound;
+            gameTime = initialGameTime;
+            rewardManager.playerLives -= 1; // Decrease player lives by 1
+            Debug.Log("Player lives remaining: " + rewardManager.playerLives);
+            livesText.text = "Lives: " + rewardManager.playerLives.ToString();
+        }
+            
+    }
+    public void LoseRun()
+    {
         loseScreen.SetActive(true);
+        currentState = GameState.Lose;
+        gameTime = initialGameTime; // Reset the game time to the initial value
+        currentRound = startingRound; // Reset the current round to the starting round (1)
+        rewardManager.ResetProgress(); // Reset the progress + upgrades in the RewardManager
     }
 
     // UI Functions
@@ -157,13 +218,12 @@ public class GameManager : MonoBehaviour
         currentState = GameState.Lose;
         Application.Quit();
         Debug.Log("Quit function working");
+        rewardManager.ResetProgress();
     }
-
     public void QuitToMainMenu()
     {
         currentState = GameState.Lose;
         SceneManager.LoadScene("MainMenu");
-
     }
     public void StartGame()
     {
@@ -174,8 +234,6 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         currentState = GameState.Paused;
-        Time.timeScale = 0f;
-        pauseScreen.SetActive(true);
     }
 
     public void ResumeGame()
@@ -184,8 +242,19 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         pauseScreen.SetActive(false);
     }
+    public void NextRound()
+    {
+        roundUIUpdated = false;
+        winScreen.SetActive(false);
 
+        currentRound += 1;
+        initialGameTime -= (gameTime * 0.1f);
+        gameTime = initialGameTime;
 
+        gridManager.StartGame();
+        currentState= GameState.StartOfGame;
+
+    }
     //Grid generator and reward system will be added here in the future
 
     public void PlayerSelected(int selectedValue)
@@ -197,7 +266,5 @@ public class GameManager : MonoBehaviour
         {
             Win();
         }
-
-
     }
 }
