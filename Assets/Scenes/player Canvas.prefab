@@ -1204,7 +1204,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 150, y: 0}
-  m_SizeDelta: {x: 280, y: 350}
+  m_SizeDelta: {x: 280, y: 370}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &675353039551532825
 CanvasRenderer:
@@ -1822,7 +1822,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 5.79}
   m_SizeDelta: {x: 210, y: 261.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &928888010815401387
@@ -1853,11 +1853,25 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Get through as many as rounds as possible. Click to start!\n\nRecreate
+  m_text: 'Get through as many as rounds as possible. Click to start!
+
+
+    Recreate
     the target seqeunces from the numbers on the grid.  Get atleast one to pass the
-    round before the timer runs out. \n\nReward Key:\n1. Five seconds added to starting
-    time of the next round.\n2. Earn another life.\n3. Increase max selections per
-    round.\n"
+    round before the timer runs out. Each round start with less time!
+
+
+    Reward
+    Key:
+
+    1. Five seconds added to starting time of the next round.
+
+    2. Earn
+    another life.
+
+    3. Increase max selections per round.
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3608,7 +3622,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 140}
+  m_AnchoredPosition: {x: 0, y: 149.6}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1681047197650256588

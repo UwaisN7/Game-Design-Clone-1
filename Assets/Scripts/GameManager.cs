@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
                 //Player gets the rewards and wins the game and the win screen is displayed timescale is 0
                 Time.timeScale = 0f;
                 winScreen.SetActive(true);
-                instructionPanel.SetActive(true);
+                instructionPanel.SetActive(false);
 
                 break;
             case GameState.Lose:
@@ -150,6 +150,7 @@ public class GameManager : MonoBehaviour
                 break;
              case GameState.FailedRound:
                 Time.timeScale = 0f;
+                instructionPanel.SetActive(false);
                 break;
         }
 
@@ -198,6 +199,7 @@ public class GameManager : MonoBehaviour
     public void Win()
     {
         currentState = GameState.Win;
+
     }
 
     public void Lose()
